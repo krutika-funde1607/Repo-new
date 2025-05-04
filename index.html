@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>shop@139 - Simple Shopping App</title>
+    <style>
+        /* Your existing styles here */
+
+        /* Additional style for the shopping cart */
+        #shopping-cart {
+            position: fixed;
+            top: 0;
+            right: 0;
+            background-color: #f8f8f8;
+            padding: 10px;
+            border: 1px solid #ddd;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            width: 250px;
+            z-index: 1000;
+            border-radius: 5px;
+        }
+
+        #shopping-cart h2 {
+            color: #333;
+            border-bottom: 1px solid #ddd;
+            padding-bottom: 5px;
+            margin-bottom: 10px;
+        }
+
+        #shopping-cart p {
+            margin: 5px 0;
+        }
+
+        /* Button styles */
+        button {
+            background-color: #ff6600;
+            color: #fff;
+            border: none;
+            padding: 8px 16px;
+            font-size: 14px;
+            cursor: pointer;
+            transition: background-color 0.3s ease-in-out;
+            border-radius: 5px;
+        }
+
+        button:hover {
+            background-color: #ff8533;
+        }
+
+        /* Updated product styling */
+        .product {
+            border: 1px solid #ddd;
+            padding: 10px;
+            margin: 10px;
+            text-align: center;
+            background-color: #fff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            transition: box-shadow 0.3s ease-in-out;
+            border-radius: 5px;
+        }
+
+        .product:hover {
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .product img {
+            max-width: 100%;
+            max-height: 150px;
+            margin-bottom: 10px;
+            border-radius: 5px;
+        }
+
+        /* Footer style */
+        footer {
+            text-align: center;
+            background-color: #333;
+            color: #fff;
+            padding: 10px;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+
+    <header style="background-color: #ff6600; color: #fff; padding: 10px;">
+        <h1>shop@139 - Simple Shopping App</h1>
+    </header>
+
+    <div id="product-list"></div>
+
+    <!-- Shopping cart container -->
+    <div id="shopping-cart"></div>
+
+    <script>
+        const products = [
+            { id: 1, name: 'MOUSE', priceINR: 1500, image: 'https://i.dell.com/is/image/DellContent/content/dam/ss2/product-images/peripherals/alienware/peripherals/alienware-trimode-720m-wireless-mouse/assets/mouse-aw720m-bk-gallery-1.psd?fmt=png-alpha&pscan=auto&scl=1&hei=402&wid=571&qlt=100,1&resMode=sharp2&size=571,402&chrss=full' },
+            { id: 2, name: 'LAPTOP', priceINR: 2250, image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQZYQyqHqZWkWU_aA4SIqBU9cz44JYeFQvL12-kpz2XbVQG9g7DWwCXqjiSPkzt07c5p88&usqp=CAU' },
+            { id: 3, name: 'KEYBOARD', priceINR: 1875, image: 'https://snpi.dell.com/snp/images/products/large/en-us~A6998935/A6998935.jpg ' },
+        ];
+
+        function displayProducts() {
+            const productListElement = document.getElementById('product-list');
+
+            products.forEach(product => {
+                const productElement = document.createElement('div');
+                productElement.classList.add('product');
+                productElement.innerHTML = `
+                    <img src="${product.image}" alt="${product.name}">
+                    <h3>${product.name}</h3>
+                    <p>Price: ₹${product.priceINR.toFixed(2)} INR</p>
+                    <button onclick="addToCart(${product.id})">Add to Cart</button>
+                `;
+                productListElement.appendChild(productElement);
+            });
+        }
+
+        // Shopping cart array to store added items
+        const shoppingCart = [];
+
+        function addToCart(productId) {
+            const selectedProduct = products.find(product => product.id === productId);
+            if (selectedProduct) {
+                shoppingCart.push(selectedProduct);
+                updateCart();
+                alert(`Added ${selectedProduct.name} to the cart!`);
+            }
+        }
+
+        function updateCart() {
+            const cartElement = document.getElementById('shopping-cart');
+            cartElement.innerHTML = '<h2>Shopping Cart</h2>';
+
+            if (shoppingCart.length === 0) {
+                cartElement.innerHTML += '<p>Cart is empty</p>';
+            } else {
+                shoppingCart.forEach(item => {
+                    const cartItemElement = document.createElement('div');
+                    cartItemElement.innerHTML = `
+                        <p>${item.name} - ₹${item.priceINR.toFixed(2)} INR</p>
+                    `;
+                    cartElement.appendChild(cartItemElement);
+                });
+
+                const totalAmount = shoppingCart.reduce((total, item) => total + item.priceINR, 0);
+                cartElement.innerHTML += `<p>Total: ₹${totalAmount.toFixed(2)} INR</p>`;
+            }
+        }
+
+        window.onload = () => {
+            displayProducts();
+            updateCart();
+        };
+    </script>
+
+    <footer style="background-color: #333; color: #fff; padding: 10px;">
+        &copy; 2023 shop@139. All rights reserved.
+    </footer>
+
+</body>
+</html>
